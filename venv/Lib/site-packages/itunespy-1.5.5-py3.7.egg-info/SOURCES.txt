@@ -1,0 +1,15 @@
+README.md
+setup.cfg
+setup.py
+itunespy/__init__.py
+itunespy/ebook_artist.py
+itunespy/movie_artist.py
+itunespy/music_album.py
+itunespy/music_artist.py
+itunespy/result_item.py
+itunespy/track.py
+itunespy.egg-info/PKG-INFO
+itunespy.egg-info/SOURCES.txt
+itunespy.egg-info/dependency_links.txt
+itunespy.egg-info/requires.txt
+itunespy.egg-info/top_level.txt

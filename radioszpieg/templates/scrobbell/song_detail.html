@@ -1,0 +1,167 @@
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block 'scri' %}
+
+    <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+  <meta property="og:url"           content="https://radioo.pl/utwor/{{ object.slug }}" />
+  <meta property="og:type"          content="website" />
+  <meta property="og:title"         content="{{ object.name }}" />
+  <meta property="og:description"   content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}" />
+  <meta property="og:image"         content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %} />
+  
+  <meta itemprop="name" content="{{ object.name }}">
+  <meta itemprop="description" content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}">
+  <meta itemprop="image" content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %}>
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ object.name }}">
+  <meta name="twitter:description" content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}">
+  <meta name="twitter:image" content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %}>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="{% static 'chartkick.js' %}"></script>
+<title>RADIOO.PL - {{ object.name }}</title>
+{% endblock %}
+
+
+{% block 'content' %}
+  <!-- Load Facebook SDK for JavaScript -->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  <!-- Your share button code -->
+{% load chartkick %}
+
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <!-- Tytuł --><h1>{{ object.name }}</h1>
+    </div>
+  </div>
+    <div class="row">
+                        <div class="col-sm-3">
+
+                                   {% if object.ds_img != "None" %}
+      <img src="{{ object.ds_img }}"  class="img-fluid"></img>
+        {% endif %}
+
+
+
+        </div>
+
+
+    <div class="col-sm-4">
+          Artysci: {% for artist in object.artist.all %}{{ artist|join:", "  }} {% endfor %}<br>
+Rok: {{ object.ds_year }} <br>
+Gatunek: {% for s in object.ds_genre.all %} <a href="{% url 'genre_detail' s.id %}">
+{{ s }}</a> {% endfor %} <br>
+Styl: {% for s in object.ds_style.all %} <a href="{% url 'style_detail' s.id %}">
+{{ s }}</a> {% endfor %}<br>
+Kraj: {{ object.ds_country_f }} <br>
+        Label: {{ object.ds_label.all|join:", " }} <br>
+                          <div class="fb-share-button"
+    data-href="https://radioo.pl/utwor/{{ object.slug }}"
+    data-layout="button_count">    
+  </div>
+  <a class="twitter-share-button"
+  href="https://twitter.com/intent/tweet?text=Grają%20[{{ object.ds_year }}]w%20radiu%20,&hashtags=radioo,{{ object.stations.all|join:','|cut:' ' }},{{object.ds_style.all|join:','|cut:' ' }}&url=https://radioo.pl/utwor/{{ object.slug }}">
+Tweet</a>
+  
+  <br><br>
+        Podobne Utwory:<br>
+        {% for s in similar %} <a href="{% url 'song_detail' s.slug %}">{% if s != object %}{{ s }}<br>{% endif %}</a> {% endfor %}
+
+
+
+    </div>
+             <div class="col-sm-5">
+                 {% pie_chart data with height='400px' %}
+
+                               Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:", " }}<br>
+<br>
+Ostatnie emisje:<br>
+{% for em in object.emisje %}
+        {{ em.date }} - <a href="{% url 'station_detail' em.station.slug %}">{{ em.station }}</a><br>
+{% endfor %}
+
+
+
+    </div>
+
+    </div>
+<br>
+  <div class="row">
+
+                  <div class="col-sm-6">
+
+                            {% if  object.clip != "None" %}
+        <div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ object.clip }}"></iframe>
+        </div>
+        {% endif %}
+    </div>
+
+
+
+
+
+
+      <div class="col-sm-4">
+                         <div class="embed-responsive embed-responsive-1by1">    <script>
+        if ("{{ object.spo }}"=="None" || "{{ object.spo }}"=="BRAK")
+        { document.write("brak spotify<br>");
+        } else { document.write('<iframe src="https://open.spotify.com/embed/track/{{ object.spo }}" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>'); }
+
+    </script>
+
+                 </div>
+
+
+      </div>
+              {% if perms.scrobbell.change_song %}
+      <div class="col-sm-2">
+        <form method="post" action="{% url "editsong" %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+        <input type="submit" class="btn btn-success" value="Wyslij">
+
+        </form>
+
+
+   </div>
+
+        {% endif %}
+
+  </div>
+    {% line_chart line_data %}
+
+ <img src="https://ireneusz.it/cowradio/static/radioszpieg/img/logo.png" >
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,179 @@
+
+{% extends "base.html" %}
+
+
+{% block 'scri' %}
+<script type="text/javascript" src='https://ireneusz.it/static/scripts/jquery.min.js'></script>
+<script type="text/javascript" src='https://ireneusz.it/static/scripts/jquery.jplayer.min.js' ></script>
+
+<script type="text/javascript">
+//<![CDATA[
+
+$(document).ready(function(){
+
+$(document).ready(function(){
+   $('.js-audio').hover(play, end);
+});
+
+	// Local copy of jQuery selectors, for performance.
+	var	my_jPlayer = $("#jquery_jplayer"),
+		my_trackName = $("#jp_container .track-name"),
+		my_playState = $("#jp_container .play-state"),
+		my_extraPlayInfo = $("#jp_container .extra-play-info");
+
+	// Some options
+	var	opt_play_first = true, // If true, will attempt to auto-play the default track on page loads. No effect on mobile devices, like iOS.
+		opt_auto_play = true, // If true, when a track is selected, it will auto-play.
+		opt_text_playing = "Now playing", // Text when playing
+		opt_text_selected = "Track selected"; // Text when not playing
+
+	// A flag to capture the first track
+	var first_track = true;
+
+	// Change the time format
+	$.jPlayer.timeFormat.padMin = false;
+	$.jPlayer.timeFormat.padSec = false;
+	$.jPlayer.timeFormat.sepMin = " min ";
+	$.jPlayer.timeFormat.sepSec = " sec";
+
+	// Initialize the play state text
+	my_playState.text(opt_text_selected);
+
+	// Instance jPlayer
+	my_jPlayer.jPlayer({
+		ready: function () {
+			$("#jp_container .track-default").click();
+		},
+		timeupdate: function(event) {
+			my_extraPlayInfo.text(parseInt(event.jPlayer.status.currentPercentAbsolute, 10) + "%");
+		},
+		play: function(event) {
+			my_playState.text(opt_text_playing);
+		},
+		pause: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		ended: function(event) {
+			my_playState.text(opt_text_selected);
+		},
+		swfPath: "../../dist/jplayer",
+		cssSelectorAncestor: "#jp_container",
+		supplied: "mp3",
+		wmode: "window"
+	});
+
+	// Create click handlers for the different tracks
+	$("#jp_container .track").click(function(e) {
+		my_trackName.text($(this).text());
+		my_jPlayer.jPlayer("setMedia", {
+			mp3: $(this).attr("href")
+		});
+		if((opt_play_first && first_track) || (opt_auto_play && !first_track)) {
+			my_jPlayer.jPlayer("play");
+		}
+		first_track = false;
+		$(this).blur();
+		return false;
+	});
+
+	var play = function() {
+   var id = $(this).attr('file-id');
+    my_jPlayer.jPlayer("setMedia", {
+			mp3: id
+		});
+		my_jPlayer.jPlayer("play");
+}
+
+var end = function() {
+
+    my_jPlayer.jPlayer("stop");
+
+}
+
+
+
+});
+//]]>
+
+
+
+
+
+
+
+</script>
+
+
+
+{% endblock %}
+
+
+
+
+{% block 'content' %}
+
+<script>
+function playRadio() {
+      my_jPlayer.jPlayer("setMedia", {
+			mp3: "{{ object.stream_url }}"
+		});
+		my_jPlayer.jPlayer("play");
+}
+</script>
+
+<div class="text-light bg-dark">
+    <button onclick="playRadio()">Click me</button>
+<div class="container">
+  <div class="row">
+
+          <div class="col-sm-12">
+      <!-- Tytuł --><h1>{{ object.name }} <br> {{ now }}</h1>
+    </div>
+      <div class="row">
+<div class="col-sm-10">
+
+<table>
+{% for hist, c, ct in last_hist %}<tr>
+
+    <td id="jp_container" class="demo-container">
+        {% if hist.song.clip != "None" %}<a href="https://www.youtube.com/watch?v={{ hist.song.clip }}"><img src="https://ireneusz.it/static/img/youtube.png"></img></a>{% endif %}
+        {% if hist.spo != "None" %}<a href="https://open.spotify.com/track/{{ hist.spo }}"><img src="https://ireneusz.it/static/img/spotify.png"></img></a>{% endif %}
+<br><h3>{{ hist.last|time:"H:i"}}</h3>{% if c == 1 %}<font color="red">NEW!</font>{{ hist.song.ds_year }}{% endif %}
+        <td>{% if  hist.song.sp_prev != "None" %}<div class="js-audio" file-id="{{ hist.song.sp_prev }}"><img src="https://ireneusz.it/static/img/play-button.png" width="36"></img></div> {% endif %}</td>
+        </td><td><a href="{% url 'song_detail' hist.song.id %}" data-toggle="tooltip" data-placement="right" title="{{ c }} raz w ostatnich 30 dniach, {{ ct }} raz w ostatnim tygodniu.">{{ hist.song.artist.all|join:", " }}<br>{{ hist.song.title }}</a></td>
+
+
+          </tr>
+            {% endfor %}
+
+</table>
+
+
+
+</div>
+
+          <div class="col-sm-2">
+<iframe src="https://open.spotify.com/embed/playlist/{{ object.playlist_sp_url }}" width="300" height="700" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    </div>
+
+
+
+  </div>
+
+
+  </div>
+</div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+
+
+
+
+
+{% endblock %}

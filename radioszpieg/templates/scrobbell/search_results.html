@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block 'content' %}
+<div class="container">
+    <img src="https://ireneusz.it/cowradio/static/radioszpieg/img/logo.png" >
+<h3>Wyniki wyszukiwania:</h3>
+
+<ul>
+  {% for song in object_list %}
+    <li>
+      <a href="{% url 'song_detail' song.slug %}"> {{ song.name }}</a> {{ song.ds_year }}<br>
+      {% if song.spo != "None" %}<img src="https://ireneusz.it/static/img/spotify.png"></img>{% endif %}
+      {% if song.clip != "None" %}<img src="https://ireneusz.it/static/img/youtube.png">{% endif %}<br>{{ song.stations.all|join:", " }}
+    </li>
+  {% endfor %}
+</ul>
+{% include "pagination.html" with page=page_obj %}
+</div>
+{% endblock %}

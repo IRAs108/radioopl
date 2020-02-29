@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+
+
+{% block 'content' %}
+
+<table>
+{% for hist in object_list %}<tr>
+Test
+<td>
+<br><h3>{{ hist.last|time:"H:i"}}</h3>{% if c == 1 %}<font color="red">NEW!</font>{{ hist.song.ds_year }}{% endif %}
+        </td><td><a href="{% url 'song_detail' hist.song.id %}" data-toggle="tooltip" data-placement="right" title="{{ c }} raz w ostatnich 30 dniach, {{ ct }} raz w ostatnim tygodniu.">{{ hist.song.artist.all|join:", " }}<br>{{ hist.song.title }}</a></td>
+    <td id="jp_container" class="demo-container">{% if  hist.song.sp_prev != "None" %}<a href="{{ hist.song.sp_prev }}" class="track" ><img src="https://ireneusz.it/static/img/play-button.png"></img></a>{% endif %}
+        {% if hist.song.clip != "None" %}<a href="https://www.youtube.com/watch?v={{ hist.song.clip }}"><img src="https://ireneusz.it/static/img/youtube.png"></img></a>{% endif %}
+        {% if hist.spo != "None" %}<a href="https://open.spotify.com/track/{{ hist.spo }}"><img src="https://ireneusz.it/static/img/spotify.png"></img></a>{% endif %}</td>
+</tr>
+            {% endfor %}
+
+</table>
+
+
+
+{% endblock %}

@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/png" href="{% static 'logo/favicon.png' %}" />
+    <link rel="stylesheet" href='{% static "css/bootstrap.min.css" %}' >
+    {% block 'scri' %}
+    {% endblock %}
+
+
+
+
+
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="{% url 'station_list' %}"><img src="{% static 'logo/logo_t.png' %}" width="200"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'muxrb' %}">MUX Radia Bielsko DAB+</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Stacje
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'station_detail' 'radio-bielsko' %}">Radio Bielsko</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'express-fm' %}">Radio Express</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'disco-radio' %}">Disco Radio</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'mega-radio' %}">Mega Radio</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'radio-nuta' %}">Radio Nuta</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'station_detail' 'radio-90' %}">Radio 90</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'radio-kaszebe' %}">Radio Kaszebe</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'station_detail' 'rmf-fm' %}">RMF FM</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'rmf-maxxx' %}">RMF MAXXX</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'station_detail' 'dance-radio-cz' %}">Dance Radio</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'seejay-radio' %}">Seejay</a>
+          <a class="dropdown-item" href="{% url 'station_detail' 'helax' %}">Helax</a>
+        </div>
+      </li>
+      <li class="nav-item">
+
+      </li>
+    </ul>
+    <form action="{% url 'search_results' %}" method="get" class="form-inline my-2 my-lg-0">
+      <input name="q" class="form-control mr-sm-2" type="search" placeholder="Szukaj" aria-label="Szukaj utworu">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
+    </form>
+  </div>
+</nav>
+
+  <script type="text/javascript" src="{% static 'scripts/jquery.min.js' %}"></script>
+
+{% block 'content' %}
+{% endblock %}
+<br>
+<div class="container">
+<footer class="footer">
+    <p>https://radioo.pl - Serwis w trakcie budowy. Kontakt ireneusz@poczta.fm  Image by <a href="https://pixabay.com/users/TBIT-715211/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=949236">Thomas Breher</a> from <a href="https://pixabay.com/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=949236">Pixabay</a></p>
+</footer>
+</div>
+
+   <style>
+    table {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+body {
+  background: url('{% static 'images/frequency.jpg' %}') no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+
+
+
+}
+
+
+
+</style>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript" src="{% static 'scripts/jquery.jplayer.min.js' %}" ></script>
+
+<script type="text/javascript" src='{% static "scripts/player.js" %}'></script>
+
+
+
+<script>var lid = 0;
+var state = 0;
+var state2 = 0;
+var lid2 = 0;
+var firstPlay = 1;
+function PrPlay(song, id){
+if (lid != id||state == 1){
+//console.log(song);
+document.getElementById(id).src='{% static "scrobbell/img/buttons/stop.png" %}';
+lid2 = lid;
+lid = id;
+state = 0;
+state2 = 1;
+if (id == "playStation"){
+firstPlay = 2;
+$("#jquery_jplayer").jPlayer("reset");
+$("#jquery_jplayer").jPlayer("setMedia", {
+			mp3: song
+		});
+$("#jquery_jplayer").jPlayer("play");
+}
+else {
+firstPlay = 2;
+$("#jquery_jplayer").jPlayer("clearMedia");
+$("#jquery_jplayer").jPlayer("setMedia", {
+			mp3: song
+		});
+		$("#jquery_jplayer").jPlayer("play");
+}}
+else {
+//console.log("STOP");
+document.getElementById(id).src='{% static "scrobbell/img/buttons/play.png" %}';
+state = state + 1;
+state2 = 0;
+$("#jquery_jplayer").jPlayer("stop");
+}
+if (state2 == 1&lid2 != id& lid2!=0){
+document.getElementById(lid2).src='{% static "scrobbell/img/buttons/play.png" %}';}
+}</script>
+
+<script>
+    function bigImg(src, id){
+    if (firstPlay == 2){
+    PrPlay(src, id);
+    console.log(id);
+    }
+    }
+        function offImg(src, id){
+     if (firstPlay == 2){
+     PrPlay(src, id);
+  //  console.log(id);
+    }
+    }
+</script>
+
+</body>
+</html>

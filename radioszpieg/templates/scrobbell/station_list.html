@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+{% block 'scri' %}
+
+
+
+<title>RADIOO.pl - {{ object.name }}</title>
+
+{% endblock %}
+
+
+{% block 'content' %}
+<div id="jquery_jplayer"></div>
+<div class="container">
+
+    <div class="alert alert-info fixed-bottom"><div class="last_rds">OSTATNIA ZMIANA</div></div>
+
+
+
+    <div class="row">
+{% for radio in object_list %}
+
+
+
+
+<div class="col-sm">
+ <center>  
+     <img id="playStation{{ forloop.counter }}" title="click for play" src='{% static "scrobbell/img/buttons/play.png" %}' width="42" height="42" onclick="PrPlay('{{ radio.stream_url}}', this.id);" />
+        <a href="{% url 'station_detail' radio.slug %}">
+<h4>{{ radio }}</h4>
+ </a>
+    <img src="{% static 'muxrb/brak.png' %}" width="200" class="img-fluid song-cover rounded-circle" alt="alternative" id="imgcov_{{ forloop.counter }}"><br>
+<div class="rds_{{ forloop.counter }}">RDS</div>
+        
+</center>
+</div>
+
+{% if forloop.counter|divisibleby:"4" %}</div>{% endif %}
+{% if forloop.counter|divisibleby:"4" %}<div class="row">{% endif %}
+
+
+    
+    <script>
+
+
+
+var last_{{ forloop.counter }};
+
+
+
+
+var i_{{ forloop.counter }};
+   function GetLastSong_{{ forloop.counter }}(){
+
+$.ajax({
+    url : "{% url 'now' %}",
+    method : "get",
+    dataType : "json",
+    data : {
+        st : {{ radio.pk }}
+
+    }
+})
+.done(res => {
+
+if (last_{{ forloop.counter }}!=res['rds']){
+console.log(last_{{ forloop.counter }});
+last_{{ forloop.counter }}=res['rds'];
+$(".rds_{{ forloop.counter }}").html(res['artist']+"<br>"+res['title']);
+$(".last_rds").html('{{ radio }}: '+res['artist']+" - "+res['title']);
+
+    var covimg;
+    var covimgi;
+    covimg = res['img'];
+    if (covimg==="None")
+    {
+        covimgi = '{% static 'muxrb/brak.png' %}';
+    }
+    else
+    {
+        covimgi = covimg;
+    }
+
+    document.getElementById("imgcov_{{ forloop.counter }}").src=covimgi;
+
+}
+});
+
+}
+  GetLastSong_{{ forloop.counter }}();
+const time_{{ forloop.counter }} = setInterval(function() {
+    GetLastSong_{{ forloop.counter }}();
+
+}, 5000 + {{ forloop.counter }}*100);
+</script>
+
+{% endfor %}
+       </div>
+
+ 
+
+
+
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block 'scri' %}
+
+
+
+
+<title>RADIOO.PL - {{ object.name }}</title>
+
+
+{% endblock %}
+
+
+
+
+{% block 'content' %}
+<br>
+<div id="jquery_jplayer"></div>
+
+<div class="container">
+
+<div class="row">
+
+    <div class="col-sm">
+    {% if object.img %}<img src='{% static "/images/upload/" %}{{ object.img }}' width="200"  />{% else %}<h2>{{ object.name }}</h2>{% endif %}
+
+
+
+        </div>
+<div class="col-sm">
+
+</div>
+<div class="col-sm"></div>
+    <div><center>
+    <img src="{% static 'muxrb/brak.png' %}" width="200" class="img-fluid song-cover rounded-circle" alt="alternative" id="imgcov"><br>
+<div class="rds">RDS</div>
+        <img id="playStation" title="Kliknij aby odsłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="64" height="64" onclick="PrPlay('{{ object.stream_url}}', this.id);" />
+</center>
+</div>
+</div>
+
+
+  <div class="row">
+
+
+    <div class="col-sm">
+        <h4>Ostatnio emitowano:</h4>
+
+
+
+<table>
+{% for hist, c, ct in last_hist %}<tr class="hist_{{ forloop.counter }}">
+ <td id="jp_container" class="demo-container">{% if  hist.song.sp_prev != "None" %}
+
+    <img id="playButton{{ forloop.counter }}" title="Kliknij aby słuchać stacji" src='{% static "scrobbell/img/buttons/play.png" %}' width="36" onclick="PrPlay('{{ hist.song.sp_prev }}', this.id);"></img>
+
+    {% endif %}</td>
+
+<td><h3>{{ hist.last|time:"H:i"}}</h3>{% if c == 1 %}<font color="red">NEW!</font>{{ hist.song.ds_year }}{% endif %}</td>
+
+    </td><td><a href="{% url 'song_detail' hist.song.slug %}" >{{ hist.song.artist.all|join:", " }}<br>{{ hist.song.title }}</a></td>
+     <td>
+        {% if hist.song.clip != "None" %}<a href="https://www.youtube.com/watch?v={{ hist.song.clip }}">YOUTUBE</a>{% endif %}
+        {% if hist.spo != "None" %}<a href="https://open.spotify.com/track/{{ hist.spo }}">SPOTIFY</a>{% endif %}</td>
+
+</tr>
+            {% endfor %}
+
+</table>
+        <h5><a href="{% url 'lastsong'%}?st={{ object.id }}" >Pełna historia</a></h5>
+    </div>
+
+          <div class="col-sm">
+      <h4>Informacja:</h4>
+
+        <h5>{{ object.info }}</h5>źródło - wikipedia
+
+    </div>
+    
+    
+<script>
+
+
+
+var last;
+
+
+
+
+var i;
+   function GetLastSong(){
+
+$.ajax({
+    url : "{% url 'now' %}",
+    method : "get",
+    dataType : "json",
+    data : {
+        st : {{ object.pk }}
+
+    }
+})
+.done(res => {
+
+if (last!=res['rds']){
+console.log(last);
+last=res['rds'];
+$(".rds").html(res['artist']+"<br>"+res['title']);
+
+    var covimg;
+    var covimgi;
+    covimg = res['img'];
+    if (covimg==="None")
+    {
+        covimgi = '{% static 'muxrb/brak.png' %}';
+    }
+    else
+    {
+        covimgi = covimg;
+    }
+
+    document.getElementById("imgcov").src=covimgi;
+
+}
+});
+
+}
+  GetLastSong();
+const time = setInterval(function() {
+    GetLastSong();
+
+}, 5000);
+</script>
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+
+</div>
+
+
+
+
+{% endblock %}

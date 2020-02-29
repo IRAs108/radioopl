@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+
+{% block 'content' %}
+
+<h1>{{ object }}</h1>
+<br>
+
+{% for s in songs %}
+
+
+<a href="{% url 'song_detail' s.slug %}">{{ s }}</a><br>
+
+{% endfor %}
+
+
+{% endblock %}}

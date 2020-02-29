@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block 'content' %}
+<div class="container">
+<div id="jquery_jplayer"></div>
+      <img src="https://ireneusz.it/cowradio/static/radioszpieg/img/logo.png" >
+    <h2>{{ station.name }}:</h2>
+    {% include "pagination.html" with page=page_obj %}
+<table>
+
+{% for hist in object_list %}<tr>
+    {% if forloop.first %}<h5>{{ hist.last|date:"l j E Y" }}</h5>{% endif %}
+ <td id="jp_container" class="demo-container">{% if  hist.song.sp_prev != "None" %}
+
+    <img id="playButton{{ forloop.counter }}" title="Kliknij aby odsłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' onclick="PrPlay('{{ hist.song.sp_prev }}', this.id);"></img>
+
+    {% endif %}</td>
+    <td width="50">
+<h3>{{ hist.last|time:"H:i"}}</h3>{% if c == 1 %}<font color="red">NEW!</font>{{ hist.song.ds_year }}{% endif %}
+        </td>
+
+    <td>
+        {% if hist.song.clip != "None" %}<a href="https://www.youtube.com/watch?v={{ hist.song.clip }}"><img src="https://ireneusz.it/static/img/youtube.png"></img></a>{% endif %}
+    {% if hist.spo != "None" %}<a href="https://open.spotify.com/track/{{ hist.spo }}"><img src="https://ireneusz.it/static/img/spotify.png"></img></a>{% endif %}</td>
+
+
+    <td width="300"><a href="{% url 'song_detail' hist.song.slug %}" data-toggle="tooltip" data-placement="right" title="{{ c }} raz w ostatnich 30 dniach, {{ ct }} raz w ostatnim tygodniu.">{{ hist.song.artist.all|join:", " }}<br>{{ hist.song.title }}</a></td>
+
+
+</tr>
+            {% endfor %}
+
+</table>
+{% include "pagination.html" with page=page_obj %}
+
+</div>
+<br><br>
+
+
+
+
+
+{% endblock %}
+</body>

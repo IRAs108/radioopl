@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'scri' %}
+
+
+  <title>MUX DAB+ Radia Bielsko - Aktualnie grane utwory</title>
+  <meta name="description" content="Aktualnie grane utwory w multiplexie eksperymentalnem DAB + Radia Bielsko. Mega Radio, Disco Radio, Radio Nuta, Express FM">
+  <meta name="keywords" content="DAB+,Radio,Bielsko-Biała,Szyndzielnia,5B,176.64Mhz,Cyfrowe,Express,Mega,Nuta,Disco">
+  <meta name="author" content="ireneusz.it">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="MUX DAB+ Radia Bielsko - Aktualnie grane utwory">
+  <meta property="og:description" content="Aktualnie grane utwory w multiplexie eksperymentalnem DAB + Radio Bielsko, Mega Radio, Disco Radio, Radio Nuta, Express FM">
+  <meta property="og:image" content="{% static 'images/dabplus.png' %}">
+  <meta property="og:url" content="https://radioo.pl/muxrb/">
+  <meta property="og:type" content="website">
+  
+  <meta itemprop="name" content="MUX DAB+ Radia Bielsko - Aktualnie grane utwory">
+  <meta itemprop="description" content="Aktualnie grane utwory w multiplexie eksperymentalnem DAB + Radio Bielsko, Mega Radio, Disco Radio, Radio Nuta, Express FM">
+  <meta itemprop="image" content="{% static 'images/dabplus.png' %}">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MUX DAB+ Radia Bielsko - Aktualnie grane utwory">
+  <meta name="twitter:description" content="Aktualnie grane utwory w multiplexie eksperymentalnem DAB + Radia Bielsko. Mega Radio, Disco Radio, Radio Nuta, Express FM">
+  <meta name="twitter:image" content="{% static 'images/dabplus.png' %}">
+
+
+
+
+<style>
+
+    .station_logo {
+filter: opacity(0.5);
+-webkit-filter: opacity(0.3);
+-webkit-box-shadow:0px 0px 50px 30px #ff0000 ;
+-moz-box-shadow:0px 0px 50px 30px #ff0000 ;
+box-shadow:0px 0px 50px 30px #ff0000 ;
+
+    }
+
+
+</style>
+
+{% endblock %}
+
+
+{% block 'content' %}
+<br>
+<div id="jquery_jplayer"></div>
+<center><h1>Aktualnie grane utwory w MUX DAB+ Radia Bielsko</h1></center>
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-4  col-lg-3 col-xl-2 offset-xl-1">
+
+     <img src="{% static 'muxrb/bielsko.jpg' %}" class="img-fluid station_logo">
+      <center><img id="playStation1" title="Kliknij aby posłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="48" onclick="PrPlay('http://stream4.nadaje.com:13322/radiobielsko', this.id);"></img></center>
+
+    <div class="time_1"></div>
+    <div class="artist_1"></div>
+    <div class="title_1"></div>
+    <div class="media_1"></div>
+    <center><img src="{% static 'muxrb/brak.png' %}" width="400" class="img-fluid" alt="alternative" id="imgid_1"></center><br />
+    <div class="history_1"></div>
+    </div>
+    <div class="col-12 col-sm-6 col-md-4  col-lg-3 col-xl-2">
+     <img src="{% static 'muxrb/express.jpg' %}" width="400" class="img-fluid station_logo">
+                    <center><img id="playStation3" title="Kliknij aby posłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="48" onclick="PrPlay('http://stream4.nadaje.com:13324/express', this.id);"></img></center>
+
+
+    <div class="time_2"></div>
+    <div class="artist_2"></div>
+    <div class="title_2"></div>
+    <div class="media_2"></div>
+    <center><img src="{% static 'muxrb/brak.png' %}" width="400" class="img-fluid" alt="alternative" id="imgid_2"></center><br />
+    <div class="history_2"></div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-4  col-lg-3 col-xl-2">
+      <img src="{% static 'muxrb/mega.png' %}" class="img-fluid station_logo">
+                    <center><img id="playStation4" title="Kliknij aby posłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="48" onclick="PrPlay('http://stream6.nadaje.com:8012/test', this.id);"></img></center>
+
+        <div class="time_3"></div>
+        <div class="artist_3"></div>
+        <div class="title_3"></div>
+        <div class="media_3"></div>
+        <center><img src="{% static 'muxrb/brak.png' %}" width="400" class="img-fluid" alt="alternative" id="imgid_3"></center><br />
+        <div class="history_3"></div>
+    </div>
+          <div class="col-12 col-sm-6 col-md-4  col-lg-3 col-xl-2">
+     <img src="{% static 'muxrb/disco.jpg' %}" class="img-fluid station_logo">
+              <center><img id="playStation2" title="Kliknij aby posłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="48" onclick="PrPlay('http://stream4.nadaje.com:8174/test', this.id);"></img></center>
+
+                                <div class="time_4"></div>
+    <div class="artist_4"></div>
+    <div class="title_4"></div>
+    <div class="media_4"></div>
+    <center><img src="{% static 'muxrb/brak.png' %}" width="400" class="img-fluid" alt="alternative" id="imgid_4"></center><br />
+    <div class="history_4"></div>
+    </div>
+          <div class="col-12 col-sm-6 col-md-4  col-lg-3 col-xl-2">
+     <img src="{% static 'muxrb/nuta.jpg' %}" class="img-fluid station_logo">
+                                                <center><img id="playStation5" title="Kliknij aby posłuchać" src='{% static "scrobbell/img/buttons/play.png" %}' width="48" onclick="PrPlay('http://stream4.nadaje.com:8392/test', this.id);"></img></center>
+
+                  <div class="time_5"></div>
+    <div class="artist_5"></div>
+    <div class="title_5"></div>
+    <div class="media_5"></div>
+    <center><img src="{% static 'muxrb/brak.png' %}" width="400" class="img-fluid" alt="alternative" id="imgid_5"></center><br />
+
+    <div class="history_5"></div>
+    </div>
+  </div>
+
+
+
+<script>
+
+var last = [];
+
+
+function hist(station){
+    for (var i = 1; i < 16; i++) {
+
+
+   $.ajax({
+    url : "{% url 'now' %}",
+    method : "get",
+    dataType : "json",
+    data : {
+        st : station,
+        p : i
+
+    }
+
+})
+.done(hi => {
+
+$(".history_"+station).append(hi['time']+ " " +hi['rds']+ "<br>");
+
+
+
+});
+
+}
+
+
+
+
+
+}
+
+
+
+     function GetLastSong(station){
+
+$.ajax({
+    url : "{% url 'now' %}",
+    method : "get",
+    dataType : "json",
+    data : {
+        st : station
+
+    }
+})
+.done(res => {
+
+if (last[station]!=res['rds']){
+console.log(last[station]);
+last[station]=res['rds'];
+art=res['artist'];
+title=res['title'];
+t=res['time'];
+$(".time_"+station).html("<center><h3>"+t+"</h3></center>");
+
+$(".artist_"+station).html("<center>"+art+"</center>");
+$(".title_"+station).html("<center><small>'"+title+"'</small></center>");
+
+var media='';
+spotify = res['spotify'];
+youtube = res['youtube'];
+preview = res['preview'];
+if (spotify != 'None'){
+media = '<a href="https://open.spotify.com/track/'+spotify+'"><img src="https://ireneusz.it/static/img/spotify.png" width="36"></img></a>';
+}
+if (youtube != 'None'){
+media = media + '<a href="https://www.youtube.com/watch?v='+youtube+'"><img src="https://ireneusz.it/static/img/youtube.png" width="36"></img></a>';
+}
+if (preview != 'None'){
+//media = media + '<img id="prev_' +station+ '" title="Kliknij aby posłuchać" src="{% static "scrobbell/img/buttons/play.png" %}" width="36" onclick="PrPlay("'+preview+'", this.id);"></img>';
+}
+
+$(".media_"+station).html('<center>'+media+'</center>');
+
+
+
+
+    var covimg;
+    var covimgi;
+    covimg = res['img'];
+    if (covimg==="None")
+    {
+        covimgi = '{% static 'muxrb/brak.png' %}';
+    }
+    else
+    {
+        covimgi = covimg;
+    }
+
+    document.getElementById("imgid_"+station).src=covimgi;
+
+$(".history_"+station).prepend(res['time']+ " " +res['rds']+ "<br>");
+
+
+
+
+
+
+}
+
+
+
+        });
+
+        }
+
+
+
+    GetLastSong(1);
+    GetLastSong(2);
+    GetLastSong(3);
+    GetLastSong(4);
+    GetLastSong(5);
+hist(1);
+hist(2);
+hist(3);
+hist(4);
+hist(5);
+const time = setInterval(function() {
+    GetLastSong(1);
+    GetLastSong(2);
+    GetLastSong(3);
+    GetLastSong(4);
+    GetLastSong(5);
+
+}, 5000);
+
+
+
+</script>
+
+{% endblock %}
