@@ -19,6 +19,8 @@ class Command(BaseCommand):
         parser.add_argument('--duplicate', action='store_true', help='Testowa komenda', )
         parser.add_argument('--get2', action='store_true', help='Get last song from stations', )
         parser.add_argument('--add2', action='store_true', help='Get last song from stations', )
+        parser.add_argument('--updatedate', action='store_true', help='Songs update date publish, created', )
+
 
     def handle(self, *args, **options):
 
@@ -505,3 +507,16 @@ class Command(BaseCommand):
                         # print(songm)
                         rdc.incr(songm)
                         rdc.incr(songt)
+
+        if options['updatedate']:
+            historia = Song.objects.all().order_by('-pk')
+            for hist in historia:
+                print(hist.pk)
+                lst = History.objects.filter(song=hist).last()
+                frst = History.objects.filter(song=hist).first()
+                try:
+                    hist.created = frst.date
+                    hist.updated = lst.date
+                    hist.save()
+                except:
+                    hist.delete()

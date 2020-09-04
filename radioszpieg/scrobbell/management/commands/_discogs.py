@@ -12,7 +12,7 @@ def get_disc(song):
     data = d.search(song.encode('utf-8'), type='relase')
     if data is None:
         return
-    year =0
+    year = 0
     try:
         first = data[0]
     except:

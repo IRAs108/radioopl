@@ -1,5 +1,6 @@
 import pytz
 from django.core import serializers
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -91,7 +92,15 @@ class RadioDetailView(DetailView):
             krrt.append(cnt)
         zipped = zip(hist, krr, krrt)
         context['last_hist'] = zipped
+        context['historia'] = hist
         context['now'] = str(nw.get("station:" + str(kwargs['object'].id) + ":n").decode("utf-8"))
+
+        toplist = Song.objects.filter(stations=kwargs['object']).order_by('-total_plays')[:20]
+        newsong = Song.objects.filter(stations=kwargs['object']).order_by('-pk')[:20]
+        uniquesong = Song.objects.annotate(stn=Count('stations')).filter(stations=kwargs['object']).filter(stn=1).order_by('-total_plays')[:20]
+        context['toplist'] = toplist
+        context['newsong'] = newsong
+        context['unique'] = uniquesong
 
         return context
 
@@ -127,12 +136,13 @@ class SongDetailView(DetailView):
         rrr = {}
         for st in Station.objects.all():
             ile = History.objects.all().filter(station=st, song=kwargs['object']).count()
-            if ile>0:
+            if ile > 0:
                 rrr[st.name] = ile
         context['data'] = rrr
-        ll =[]
-        for dayy in range(90,1, -1):
-            ile = History.objects.all().filter(song=kwargs['object'], date__gte=datetime.now()-timedelta(days=dayy),date__lte=datetime.now()-timedelta(days=dayy-1)).count()
+        ll = []
+        for dayy in range(90, 1, -1):
+            ile = History.objects.all().filter(song=kwargs['object'], date__gte=datetime.now() - timedelta(days=dayy),
+                                               date__lte=datetime.now() - timedelta(days=dayy - 1)).count()
             ll.append((dayy, ile))
             # ll.reverse()
         context['line_data'] = ll
@@ -180,6 +190,49 @@ class LastHist(ListView):
         context = super().get_context_data(**kwargs)
         context['station'] = Station.objects.get(pk=query)
         return context
+
+
+def history_list(request):
+    station = request.GET.get('st')
+    history = History.objects.all().filter(station=station).order_by('-date')
+    paginator = Paginator(history, 20)
+    page = request.GET.get('page')
+    try:
+        history = paginator.page(page)
+    except PageNotAnInteger:
+
+        history = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+        history = paginator.page(paginator.num_pages)
+    if request.is_ajax():
+        return render(request,
+                      'scrobbell/last_ajax.html',
+                      {'section': 'rds', 'rds': history})
+    return render(request,
+                  'scrobbell/last.html',
+                  {'section': 'rds', 'rds': history, 'station': station})
+
+
+def station_detail(request):
+    station = request.GET.get('st')
+    history = History.objects.all().filter(station=station).order_by('-date')
+    paginator = Paginator(history, 20)
+    page = request.GET.get('page')
+    try:
+        history = paginator.page(page)
+    except PageNotAnInteger:
+
+        history = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+        history = paginator.page(paginator.num_pages)
+    if request.is_ajax():
+        return render(request,
+                      'scrobbell/station_detail_ajax.html',
+                      {'section': 'rds', 'rds': history})
 
 
 class SimpleEditSongForm(FormView):

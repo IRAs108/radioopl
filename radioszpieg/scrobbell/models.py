@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -21,6 +23,9 @@ class Station(models.Model):
     height = models.IntegerField(editable=False, null=True)
     info = models.TextField(null=True)
     slug = models.SlugField(unique=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -128,6 +133,13 @@ class Song(models.Model):
     total_plays = models.IntegerField()
     stations = models.ManyToManyField(Station)
     slug = models.SlugField(unique=True, null=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def get_absolute_url(self):
+        return reverse('song_detail',
+                       args=[str(self.slug)])
 
     def __str__(self):
         return self.name

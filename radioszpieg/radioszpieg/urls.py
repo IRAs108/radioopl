@@ -17,13 +17,22 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.http import require_POST
 from scrobbell.views import RadioListView, RadioDetailView, SongDetailView, GenreListView, StyleListView, StyleDetailView, GenreDetailView, LastHist, SimpleEditSongForm, RadioDetailRedirect, SongDetailRedirect
-from scrobbell.views import radionow, last_history
+from scrobbell.views import radionow, last_history, history_list, station_detail
 from django.conf.urls.static import static
 from django.conf import settings
 
 from scrobbell.views import MuxRb, MuxRbAjax, SearchResultsView
+from django.contrib.sitemaps.views import sitemap
+from scrobbell.sitemaps import SongSitemap
+
+sitemaps = {
+    'songs': SongSitemap,
+
+}
+
 
 urlpatterns = [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('admin/', admin.site.urls),
     path('', RadioListView.as_view(), name='station_list'),
     # path('station/<pk>/', RadioDetailView.as_view(), name='station_detail'),
@@ -38,7 +47,7 @@ urlpatterns = [
     path('style/<pk>/', StyleDetailView.as_view(), name='style_detail'),
     path('genre/<pk>/', GenreDetailView.as_view(), name='genre_detail'),
     path('search/', SearchResultsView.as_view(), name='search_results'),
-    path('last/', LastHist.as_view(), name='lastsong'),
+    path('last/', history_list, name='history_list'),
     path('edit', require_POST(SimpleEditSongForm.as_view()), name='editsong'),
     path('ajax/now/', radionow, name="now"),
     # path('radio/ajax/last/', last_history, name="last"),

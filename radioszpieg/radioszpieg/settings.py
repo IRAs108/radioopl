@@ -23,9 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '4a0f8516-40e7-4c9a-87e1-bd08d26787af'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+SITE_ID = 1
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
@@ -40,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'chartkick',
+    'import_export',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 ]
 
 # Middleware framework
@@ -117,8 +121,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
-#STATIC_ROOT =  [os.path.join(BASE_DIR, 'static')],
+STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['/static']))
+#STATIC_ROOT =  'static'
 import chartkick
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),

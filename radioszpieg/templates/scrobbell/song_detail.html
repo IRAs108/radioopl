@@ -9,17 +9,18 @@
     Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
   <meta property="og:url"           content="https://radioo.pl/utwor/{{ object.slug }}" />
   <meta property="og:type"          content="website" />
-  <meta property="og:title"         content="{{ object.name }}" />
-  <meta property="og:description"   content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}" />
+  <meta property="og:title"         content="{{ object.name }} - Posłuchaj i sprawdz w jakim radiu mozna usłyszec" />
+  <meta property="og:description"   content="Serwis radioo.pl to nowe archiwum z utworami granymi w popularnych stacjach radiowych" />
   <meta property="og:image"         content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %} />
   
-  <meta itemprop="name" content="{{ object.name }}">
-  <meta itemprop="description" content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}">
+  <meta itemprop="name" content="{{ object.name }} - Posłuchaj i sprawdz w jakim radiu mozna usłyszec">
+<meta name="date" content="{{ object.created|date:'Y-m-d' }}" scheme="YYYY-MM-DD">
+  <meta itemprop="description" content="Serwis radioo.pl to nowe archiwum z utworami granymi w popularnych stacjach radiowych">
   <meta itemprop="image" content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %}>
   
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ object.name }}">
-  <meta name="twitter:description" content="Grany {{ object.total_plays }} razy w stacjach {{ object.stations.all|join:', ' }}">
+  <meta name="twitter:title" content="{{ object.name }}  - Posłuchaj i sprawdz w jakim radiu mozna usłyszec">
+  <meta name="twitter:description" content="Serwis radioo.pl to nowe archiwum z utworami granymi w popularnych stacjach radiowych">
   <meta name="twitter:image" content={% if object.ds_img != 'None' %}"{{ object.ds_img }}"{% else %}"{% static 'logo/logo_t.png' %}"{% endif %}>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="{% static 'chartkick.js' %}"></script>
@@ -48,7 +49,7 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12">
-      <!-- Tytuł --><h1>{{ object.name }}</h1>
+      <!-- Tytuł --><h1>{{ object.name }}</h1>W bazie od {{ object.created }}
     </div>
   </div>
     <div class="row">
@@ -150,6 +151,7 @@ Ostatnie emisje:<br>
     {% line_chart line_data %}
 
  <img src="https://ireneusz.it/cowradio/static/radioszpieg/img/logo.png" >
+    Ostatnia modyfikacja: {{ object.updated }}
 
     </div>
 

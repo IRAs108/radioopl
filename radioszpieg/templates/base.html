@@ -64,6 +64,7 @@
 </nav>
 
   <script type="text/javascript" src="{% static 'scripts/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/bootstrap.youtubepopup.min.js' %}"></script>
 
 {% block 'content' %}
 {% endblock %}
@@ -86,7 +87,7 @@ th, td {
 }
 
 body {
-  background: url('{% static 'images/frequency.jpg' %}') no-repeat center center;
+ # background: url('{% static 'images/frequency.jpg' %}') no-repeat center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
@@ -162,6 +163,11 @@ document.getElementById(lid2).src='{% static "scrobbell/img/buttons/play.png" %}
     }
     }
 </script>
-
+<script>
+ $(document).ready(function(){
+ {% block domready %}
+ {% endblock %}
+ });
+</script>
 </body>
 </html>

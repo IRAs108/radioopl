@@ -1,0 +1,30 @@
+{% load static %}
+<table>
+{% for data in rds %}
+
+<tr>
+    {% if forloop.first %}<h2>{{ data.date|date:'l Y-m-d'}}</h2>{% endif %}
+
+    <td>    {% if data.song.sp_prev != "None" %}
+    <p><a class="sm2_button" href="{{ data.song.sp_prev }}.mp3" ></a></p>
+    {% endif %}</td>
+    <td><h2>
+
+    {{ data.date|date:'H:i'}} </h2></td>
+
+   <td>
+       {% if data.song.clip != "None" %}<img class="youtube" rel="{{ data.song.clip }}" src="{% static 'image/youtube.png' %}"></img>{% endif %}
+       {% if data.spo != "None" %}<a href="https://open.spotify.com/track/{{ data.spo }}"><img src="{% static 'image/spotify-sketch.png' %}"></img></a>{% endif %}</td>
+<td>    {{ data.rds }} <a href="{% url 'song_detail' data.song.slug %}" >(więcej)</a>
+</td>
+
+</tr>
+
+{% endfor %}
+    </div>
+<script type="text/javascript">
+	$(function () {
+		$(".youtube").YouTubeModal({autoplay:1, width:640, height:480});
+	});
+</script>
+</table>

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'scri' %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/mp3-player-button.css' %}" />
+<script type="text/javascript" src="{% static 'script/soundmanager2.js' %}"></script>
+<script type="text/javascript" src="{% static 'script/mp3-player-button.js' %}"></script>
+<script type="text/javascript" src="{% static 'script/bootstrap.youtubepopup.min.js' %}"></script>
+
+<script>
+soundManager.setup({
+  // required: path to directory containing SM2 SWF files
+  url: '../../swf/'
+});
+</script>
+{% endblock %}
+{% block 'content' %}
+<div class="container">
+ <h1>Historia granych utworów</h1>
+
+ <div id="history-list">
+ {% include "scrobbell/last_ajax.html" %}
+ </div>
+ </div>
+{% endblock %}
+
+{% block domready %}
+ var page = 1;
+ var empty_page = false;
+ var block_request = false;
+ $(window).scroll(function() {
+ var margin = $(document).height() - $(window).height() - 200;
+ if ($(window).scrollTop() > margin && empty_page == false &&
+block_request == false) {
+ block_request = true;
+ page += 1;
+ $.get('?st={{ station }}'+'&page=' + page, function(data) {
+ if(data == '') {
+ empty_page = true;
+ }
+ else {
+ block_request = false;
+ $('#history-list').append(data);
+ }
+ });
+ }
+ });
+{% endblock %}

@@ -9,6 +9,9 @@
 
 
 <title>RADIOO.PL - {{ object.name }}</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/mp3-player-button.css' %}" />
+<script type="text/javascript" src="{% static 'script/soundmanager2.js' %}"></script>
+<script type="text/javascript" src="{% static 'script/mp3-player-button.js' %}"></script>
 
 
 {% endblock %}
@@ -51,35 +54,96 @@
 
 
 
+ <div id="history-list">
 <table>
-{% for hist, c, ct in last_hist %}<tr class="hist_{{ forloop.counter }}">
- <td id="jp_container" class="demo-container">{% if  hist.song.sp_prev != "None" %}
+{% for data in historia %}
 
-    <img id="playButton{{ forloop.counter }}" title="Kliknij aby słuchać stacji" src='{% static "scrobbell/img/buttons/play.png" %}' width="36" onclick="PrPlay('{{ hist.song.sp_prev }}', this.id);"></img>
+<tr>
+    {% if forloop.first %}<h2>{{ data.date|date:'l Y-m-d'}}</h2>{% endif %}
 
+    <td>    {% if data.song.sp_prev != "None" %}
+    <p><a class="sm2_button" href="{{ data.song.sp_prev }}.mp3" ></a></p>
     {% endif %}</td>
+    <td><h2>
 
-<td><h3>{{ hist.last|time:"H:i"}}</h3>{% if c == 1 %}<font color="red">NEW!</font>{{ hist.song.ds_year }}{% endif %}</td>
+    {{ data.date|date:'H:i'}} </h2></td>
 
-    </td><td><a href="{% url 'song_detail' hist.song.slug %}" >{{ hist.song.artist.all|join:", " }}<br>{{ hist.song.title }}</a></td>
-     <td>
-        {% if hist.song.clip != "None" %}<a href="https://www.youtube.com/watch?v={{ hist.song.clip }}">YOUTUBE</a>{% endif %}
-        {% if hist.spo != "None" %}<a href="https://open.spotify.com/track/{{ hist.spo }}">SPOTIFY</a>{% endif %}</td>
+   <td>
+       {% if data.song.clip != "None" %}<img class="youtube" rel="{{ data.song.clip }}" src="{% static 'image/youtube.png' %}"></img>{% endif %}
+       {% if data.spo != "None" %}<a href="https://open.spotify.com/track/{{ data.spo }}"><img src="{% static 'image/spotify-sketch.png' %}"></img></a>{% endif %}</td>
+<td>    {{ data.rds }} <a href="{% url 'song_detail' data.song.slug %}" >(więcej)</a>
+</td>
 
 </tr>
-            {% endfor %}
 
+{% endfor %}
+    </div>
+<script type="text/javascript">
+	$(function () {
+		$(".youtube").YouTubeModal({autoplay:1, width:640, height:480});
+	});
+</script>
 </table>
-        <h5><a href="{% url 'lastsong'%}?st={{ object.id }}" >Pełna historia</a></h5>
+ </div>
+
+
     </div>
 
           <div class="col-sm">
-      <h4>Informacja:</h4>
+      <h4>Toplista:</h4>
 
-        <h5>{{ object.info }}</h5>źródło - wikipedia
+
+                <table>
+              {% for song in toplist %}
+                    <tr>
+             <td> {% if song.sp_prev != "None" %}<p><a class="sm2_button" href="{{ song.sp_prev }}.mp3" ></a></p>{% endif %}</td>
+                        <td>
+       {% if song.clip != "None" %}<img class="youtube" rel="{{ song.clip }}" src="{% static 'image/youtube.png' %}"></img>{% endif %}
+       {% if song.sp_uri != "None" %}<a href="https://open.spotify.com/track/{{ song.sp_uri }}"><img src="{% static 'image/spotify-sketch.png' %}"></img></a>{% endif %}</td>
+
+
+                        <td>{{ song }} <a href="{% url 'song_detail' song.slug %}" >(więcej)</a></td>
+              {% endfor %}
+                    </tr>
+                </table>
+              <br>
+                    <h4>Nowości:</h4>
+
+
+                <table>
+              {% for song in newsong %}
+                    <tr>
+             <td> {% if song.sp_prev != "None" %}<p><a class="sm2_button" href="{{ song.sp_prev }}.mp3" ></a></p>{% endif %}</td>
+                        <td>
+       {% if song.clip != "None" %}<img class="youtube" rel="{{ song.clip }}" src="{% static 'image/youtube.png' %}"></img>{% endif %}
+       {% if song.sp_uri != "None" %}<a href="https://open.spotify.com/track/{{ song.sp_uri }}"><img src="{% static 'image/spotify-sketch.png' %}"></img></a>{% endif %}</td>
+
+
+                        <td>{{ song }} <a href="{% url 'song_detail' song.slug %}" >(więcej)</a></td>
+              {% endfor %}
+                    </tr>
+                </table>
+
+                            <br>
+                    <h4>Unikalne dla stacji:</h4>
+
+
+                <table>
+              {% for song in unique %}
+                    <tr>
+             <td> {% if song.sp_prev != "None" %}<p><a class="sm2_button" href="{{ song.sp_prev }}.mp3" ></a></p>{% endif %}</td>
+                        <td>
+       {% if song.clip != "None" %}<img class="youtube" rel="{{ song.clip }}" src="{% static 'image/youtube.png' %}"></img>{% endif %}
+       {% if song.sp_uri != "None" %}<a href="https://open.spotify.com/track/{{ song.sp_uri }}"><img src="{% static 'image/spotify-sketch.png' %}"></img></a>{% endif %}</td>
+
+
+                        <td>{{ song }} <a href="{% url 'song_detail' song.slug %}" >(więcej)</a></td>
+              {% endfor %}
+                    </tr>
+                </table>
 
     </div>
-    
+
     
 <script>
 
@@ -134,7 +198,11 @@ const time = setInterval(function() {
 }, 5000);
 </script>
 
-
+<script type="text/javascript">
+	$(function () {
+		$(".youtube").YouTubeModal({autoplay:0, width:640, height:480});
+	});
+</script>
 
 
 
@@ -151,4 +219,27 @@ const time = setInterval(function() {
 
 
 
+{% endblock %}
+
+{% block domready %}
+ var page = 1;
+ var empty_page = false;
+ var block_request = false;
+ $(window).scroll(function() {
+ var margin = $(document).height() - $(window).height() - 200;
+ if ($(window).scrollTop() > margin && empty_page == false &&
+block_request == false) {
+ block_request = true;
+ page += 1;
+ $.get('{% url "history_list" %}'+'?st={{ object.pk }}&page=' + page, function(data) {
+ if(data == '') {
+ empty_page = true;
+ }
+ else {
+ block_request = false;
+ $('#history-list').append(data);
+ }
+ });
+ }
+ });
 {% endblock %}
