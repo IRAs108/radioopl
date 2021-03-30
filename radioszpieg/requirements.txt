@@ -10,7 +10,7 @@ cryptography==2.8
 CursesMenu==0.0.1a0
 decorator==4.4.1
 discogs-client==2.2.2
-Django==3.0.3
+Django==3.0.12
 django-crispy-forms==1.8.1
 idna==2.8
 ipython==7.12.0
