@@ -34,7 +34,7 @@ redis==3.4.1
 requests==2.22.0
 six==1.14.0
 soupsieve==1.9.5
-spotipy==2.8.0
+spotipy==2.22.1
 sqlparse==0.3.0
 traitlets==4.3.3
 urllib3==1.25.8
